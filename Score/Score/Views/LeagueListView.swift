@@ -21,34 +21,7 @@ struct LeagueListView: View {
     }
 }
 
-struct LeagueCellView: View {
-
-    let league: League
-
-    var body: some View {
-        HStack {
-            Image(uiImage: .actions)
-                .frame(width: 25, height: 25)
-            Text(league.name)
-                .bold()
-            Spacer()
-            Image(uiImage: .checkmark)
-        }
-    }
-}
-
-struct League {
-    let id: String
-    let name: String
-    let imageURL: URL
-    let matches: [Match]
-}
-
-struct Match {
-}
-
 // MARK: - Mock Data
-
 #if DEBUG
 let mockLeagues: [League] = [
     League(
@@ -61,7 +34,7 @@ let mockLeagues: [League] = [
         id: "2",
         name: "La Liga",
         imageURL: URL(string: "https://via.placeholder.com/48")!,
-        matches: []
+        matches: mockMatches
     )
 ]
 #endif
