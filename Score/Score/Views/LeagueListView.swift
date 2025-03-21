@@ -27,13 +27,13 @@ let mockLeagues: [League] = [
     League(
         id: "1",
         name: "Premier League",
-        imageURL: URL(string: "https://via.placeholder.com/48")!,
+        imageURL: URL(string: "https://media-3.api-sports.io/football/leagues/383.png")!,
         matches: []
     ),
     League(
         id: "2",
         name: "La Liga",
-        imageURL: URL(string: "https://via.placeholder.com/48")!,
+        imageURL: URL(string: "https://media.api-sports.io/flags/it.svg")!,
         matches: mockMatches
     )
 ]

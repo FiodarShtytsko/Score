@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct LeagueCellView: View {
 
@@ -13,8 +14,9 @@ struct LeagueCellView: View {
 
     var body: some View {
         HStack {
-            Image(uiImage: .actions)
-                .frame(width: 25, height: 25)
+            KFImage(league.imageURL)
+                .resizable()
+                .frame(width: 24, height: 24)
             Text(league.name)
                 .bold()
             Spacer()

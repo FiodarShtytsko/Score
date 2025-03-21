@@ -6,14 +6,18 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MatchCellView: View {
     let match: Match
 
     var body: some View {
         VStack {
-            isLive
-            HStack {
+            if match.isLive {
+                isLive
+            }
+
+            HStack(alignment: .top) {
                 teamLogo(for: match.teams[0])
                     .frame(maxWidth: .infinity)
                 infoAboutMatch
@@ -26,11 +30,9 @@ struct MatchCellView: View {
 
     private var isLive: some View {
         HStack {
-            Image(systemName: "dot.circle.fill")
-                .frame(width: 12, height: 12)
-                .foregroundColor(.red)
-            Text("Live")
+            Text("● LIVE")
                 .font(.caption)
+                .bold()
                 .foregroundColor(.red)
             Spacer()
         }
@@ -54,11 +56,10 @@ struct MatchCellView: View {
     }
 
     private func teamLogo(for team: Team) -> some View {
-        VStack(spacing: 4) {
-            Image(uiImage: .add)
+        VStack(spacing: 12) {
+            KFImage(team.logoURL)
                 .resizable()
                 .frame(width: 30, height: 30)
-
             Text(team.name)
                 .font(.subheadline)
                 .bold()

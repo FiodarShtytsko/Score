@@ -40,8 +40,8 @@ let mockMatches: [Match] = [
     Match(
         id: UUID().uuidString,
         teams: [
-            Team(id: UUID().uuidString, name: "Arsenal", logoURL: URL(string: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg")!),
-            Team(id: UUID().uuidString, name: "Manchester City", logoURL: URL(string: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg")!)
+            Team(id: UUID().uuidString, name: "Arsenal", logoURL: URL(string: "https://media-3.api-sports.io/football/teams/563.png")!),
+            Team(id: UUID().uuidString, name: "Manchester City", logoURL: URL(string: "https://media-3.api-sports.io/football/teams/4505.png")!)
         ],
         date: "21 Mar 2025",
         time: "18:30",
