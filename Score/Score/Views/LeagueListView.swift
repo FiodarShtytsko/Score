@@ -8,15 +8,41 @@
 import SwiftUI
 
 struct LeagueListView: View {
-    @State var league: [League] = mockLeagues
+    @State var leagues: [League] = []
+    @State private var isLoading = true
 
     var body: some View {
         NavigationView {
             List {
-                ForEach(league, id: \.id) { league in
-                    LeagueCellView(league: league)
+                if isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                } else {
+                    ForEach(leagues, id: \.id) { league in
+                        LeagueCellView(league: league)
+                    }
                 }
             }
+            .navigationTitle("Leagues")
+            .task {
+                await loadLeagues()
+            }
+        }
+    }
+
+
+    private func loadLeagues() async {
+        do {
+            let url = URL(string:"https://growthprodeus2.prod-cdn.clipro.tv/tests/mobile-task/games.json")!
+            let result = try await APIService.fetchLeagues(from: url)
+
+            await MainActor.run {
+                self.leagues = result
+                self.isLoading = false
+            }
+        } catch {
+            print("Ошибка загрузки: \(error)")
+            isLoading = false
         }
     }
 }
