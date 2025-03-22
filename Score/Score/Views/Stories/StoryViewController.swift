@@ -13,6 +13,16 @@ final class StoryViewController: UIViewController {
     private let pages: [StoryPage]
     private var collectionView: UICollectionView!
 
+    private let closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    var onClose: (() -> Void)?
+
     init(pages: [StoryPage]) {
         self.pages = pages
         super.init(nibName: nil, bundle: nil)
@@ -25,6 +35,20 @@ final class StoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupCloseButton()
+    }
+
+    private func setupCloseButton() {
+        view.addSubview(closeButton)
+
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            closeButton.widthAnchor.constraint(equalToConstant: 30),
+            closeButton.heightAnchor.constraint(equalToConstant: 30),
+        ])
+
+        closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
     }
 
     private func setupCollectionView() {
@@ -40,6 +64,12 @@ final class StoryViewController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
 
         view.addSubview(collectionView)
+    }
+
+    @objc private func didTapClose() {
+        dismiss(animated: true) {
+            self.onClose?()
+        }
     }
 }
 

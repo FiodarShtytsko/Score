@@ -25,6 +25,11 @@ final class StoryCell: UICollectionViewCell {
         player = nil
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        playerLayer?.frame = contentView.bounds
+    }
+
     func configure(with page: StoryPage) {
         let playerItem = AVPlayerItem(url: page.videoURL)
         queuePlayer = AVQueuePlayer()

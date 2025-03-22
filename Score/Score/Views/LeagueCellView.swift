@@ -43,7 +43,9 @@ struct LeagueCellView: View {
                         selectedPages = StoryPageWrapper(pages: match.pages)
                     }
                     .fullScreenCover(item: $selectedPages) { pages in
-                        TikTokPlayerWrapper(pages: pages.pages)
+                        TikTokPlayerWrapper(pages: pages.pages) {
+                            selectedPages = nil
+                        }
                     }
             }
         }

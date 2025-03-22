@@ -10,10 +10,15 @@ import SwiftUI
 
 struct TikTokPlayerWrapper: UIViewControllerRepresentable {
     let pages: [StoryPage]
+    let onClose: () -> Void
 
+    
     func makeUIViewController(context: Context) -> StoryViewController {
-        StoryViewController(pages: pages)
+        let controller = StoryViewController(pages: pages)
+        controller.onClose = onClose
+        return controller
     }
+
 
     func updateUIViewController(_ uiViewController: StoryViewController, context: Context) { }
 }
