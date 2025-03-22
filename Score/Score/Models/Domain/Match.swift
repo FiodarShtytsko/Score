@@ -13,6 +13,7 @@ struct Match {
     let date: String
     let time: String
     let score: String
+    let pages: [StoryPage]
     let isLive: Bool
 }
 
@@ -35,6 +36,7 @@ let mockMatches: [Match] = [
         date: "21 Mar 2025",
         time: "20:45",
         score: "2 - 1",
+        pages: [],
         isLive: false
     ),
     Match(
@@ -46,6 +48,7 @@ let mockMatches: [Match] = [
         date: "21 Mar 2025",
         time: "18:30",
         score: "1 - 3",
+        pages: [],
         isLive: true
     )
 ]

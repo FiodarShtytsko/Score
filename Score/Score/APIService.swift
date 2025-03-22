@@ -48,6 +48,15 @@ enum LeagueMapper {
         let awayScore = dto.wscGame?.primeStory?.pages.last?.awayScore
         let finalScore = [score, awayScore].compactMap { $0 }.map { String($0) }.joined(separator: " - ")
 
+        let pages = dto.wscGame?.primeStory?.pages.map { page in
+            StoryPage(
+                id: UUID().uuidString,
+                videoURL: page.videoURL,
+                duration: page.duration,
+                title: page.title
+            )
+        } ?? []
+
         return Match(
             id: dto.wscGameID,
             teams: [
@@ -57,6 +66,7 @@ enum LeagueMapper {
             date: dto.fixture.date,
             time: dto.fixture.date,
             score: finalScore.isEmpty ? "-" : finalScore,
+            pages: pages,
             isLive: isLive
         )
     }

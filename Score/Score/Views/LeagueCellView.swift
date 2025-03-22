@@ -10,6 +10,9 @@ import Kingfisher
 
 struct LeagueCellView: View {
     @State private var isExpanded: Bool = false
+    @State private var selectedPages: StoryPageWrapper? = nil
+
+
     let league: League
 
     var body: some View {
@@ -36,8 +39,19 @@ struct LeagueCellView: View {
                 MatchCellView(match: match)
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.35), value: isExpanded)
+                    .onTapGesture {
+                        selectedPages = StoryPageWrapper(pages: match.pages)
+                    }
+                    .fullScreenCover(item: $selectedPages) { pages in
+                        TikTokPlayerWrapper(pages: pages.pages)
+                    }
             }
         }
+
     }
 }
 
+struct StoryPageWrapper: Identifiable {
+    let id = UUID()
+    let pages: [StoryPage]
+}

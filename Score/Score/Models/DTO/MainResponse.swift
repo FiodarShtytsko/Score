@@ -153,7 +153,7 @@ struct PrimeStory: Codable {
 struct Page: Codable {
     let duration: Int
     let paggeID: String
-    let videoURL: String
+    let videoURL: URL
     let title: String?
     let awayScore: Int?
     let eventType: EventType?
