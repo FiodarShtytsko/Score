@@ -26,6 +26,7 @@ struct MatchCellView: View {
                     .frame(maxWidth: .infinity)
             }
         }
+        .padding(.top, 8)
     }
 
     private var isLive: some View {
@@ -39,7 +40,7 @@ struct MatchCellView: View {
     }
 
     private var infoAboutMatch: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: Layout.infoPadding) {
             Text(match.date)
                 .font(.caption)
                 .foregroundStyle(.gray)
@@ -56,7 +57,7 @@ struct MatchCellView: View {
     }
 
     private func teamLogo(for team: Team) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: Layout.logoPadding) {
             KFImage(team.logoURL)
                 .resizable()
                 .frame(width: Layout.logoSize, height: Layout.logoSize)
@@ -71,6 +72,8 @@ struct MatchCellView: View {
 private extension MatchCellView {
     enum Layout {
         static let logoSize: CGFloat = 30
+        static let logoPadding: CGFloat = 12
+        static let infoPadding: CGFloat = 4
         static let animationDuration: Double = 0.35
     }
 }
