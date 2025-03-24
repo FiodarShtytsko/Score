@@ -7,10 +7,10 @@
 import Foundation
 
 enum LeagueMapper {
-    static func map(rawMatches: [Response]) -> [League] {
+    static func map(rawMatches: [MatchResponse]) -> [League] {
         let grouped = Dictionary(grouping: rawMatches, by: { $0.league.id })
 
-        return grouped.compactMap { _, matches in
+        return grouped.compactMap { _, matches -> League? in
             guard let first = matches.first else { return nil }
 
             let validMatches = matches
@@ -21,19 +21,19 @@ enum LeagueMapper {
 
             return League(
                 id: String(first.league.id),
-                name: first.league.name.rawValue,
+                name: first.league.name,
                 imageURL: URL(string: first.league.logo),
                 matches: validMatches
             )
         }
     }
 
-    private static func map(_ dto: Response) -> Match? {
+    private static func map(_ dto: MatchResponse) -> Match? {
         guard let home = dto.teams.home, let away = dto.teams.away else {
             return nil
         }
 
-        let isLive = dto.fixture.status.short != .ns
+        let isLive = dto.fixture.status.short != "NS"
 
         let lastPage = dto.wscGame?.primeStory?.pages.last
         let score = [lastPage?.homeScore, lastPage?.awayScore]
@@ -72,7 +72,7 @@ enum LeagueMapper {
 private extension LeagueMapper {
     private static let inputDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ" // формат из JSON
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         formatter.locale = Locale(identifier: "en_US_POSIX")
         return formatter
     }()
