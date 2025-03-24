@@ -9,9 +9,22 @@
 import UIKit
 
 final class StoryViewController: UIViewController {
-
     private let pages: [StoryPage]
-    private var collectionView: UICollectionView!
+
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = .zero
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(StoryCell.self, forCellWithReuseIdentifier: StoryCell.identifier)
+        collectionView.dataSource = self
+        collectionView.isPagingEnabled = true
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = .black
+        return collectionView
+    }()
 
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
@@ -38,32 +51,39 @@ final class StoryViewController: UIViewController {
         setupCloseButton()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+
+        let newSize = view.bounds.size
+        if layout.itemSize != newSize {
+            layout.itemSize = newSize
+            layout.invalidateLayout()
+        }
+    }
+
     private func setupCloseButton() {
         view.addSubview(closeButton)
-
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            closeButton.widthAnchor.constraint(equalToConstant: 30),
-            closeButton.heightAnchor.constraint(equalToConstant: 30),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.closeButtonPadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Layout.closeButtonPadding),
+            closeButton.widthAnchor.constraint(equalToConstant: Layout.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: Layout.closeButtonSize),
         ])
 
         closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
     }
 
     private func setupCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 0
-        layout.itemSize = UIScreen.main.bounds.size
-
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        collectionView.register(StoryCell.self, forCellWithReuseIdentifier: StoryCell.identifier)
-        collectionView.dataSource = self
-        collectionView.isPagingEnabled = true
-        collectionView.showsVerticalScrollIndicator = false
-
         view.addSubview(collectionView)
+
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
     }
 
     @objc private func didTapClose() {
@@ -84,5 +104,12 @@ extension StoryViewController: UICollectionViewDataSource {
         }
         cell.configure(with: pages[indexPath.item])
         return cell
+    }
+}
+
+private extension StoryViewController {
+    enum Layout {
+        static let closeButtonSize: CGFloat = 30
+        static let closeButtonPadding: CGFloat = 16
     }
 }

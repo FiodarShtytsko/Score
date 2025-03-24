@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct TikTokPlayerWrapper: UIViewControllerRepresentable {
     let pages: [StoryPage]
     let onClose: () -> Void
