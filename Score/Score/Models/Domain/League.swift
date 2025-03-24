@@ -10,6 +10,6 @@ import Foundation
 struct League {
     let id: String
     let name: String
-    let imageURL: URL
+    let imageURL: URL?
     let matches: [Match]
 }
