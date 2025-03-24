@@ -29,22 +29,21 @@ final class StoryCell: UICollectionViewCell {
         playerLayer?.frame = contentView.bounds
     }
 
-    func configure(with page: StoryPage) {
-        cleanUpPlayer()
+    func configure(with page: StoryPage, preloadedItem: AVPlayerItem?) {
+        let playerItem = preloadedItem ?? AVPlayerItem(url: page.videoURL)
 
-        let playerItem = AVPlayerItem(url: page.videoURL)
         queuePlayer = AVQueuePlayer()
-
-        guard let queuePlayer = queuePlayer else { return }
-
+        guard let queuePlayer else { return }
         playerLooper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
 
-        let layer = AVPlayerLayer(player: queuePlayer)
-        layer.frame = contentView.bounds
-        layer.videoGravity = .resizeAspectFill
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = AVPlayerLayer(player: queuePlayer)
+        playerLayer?.frame = contentView.bounds
+        playerLayer?.videoGravity = .resizeAspectFill
 
-        playerLayer = layer
-        contentView.layer.addSublayer(layer)
+        if let layer = playerLayer {
+            contentView.layer.addSublayer(layer)
+        }
 
         queuePlayer.play()
     }

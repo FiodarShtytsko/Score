@@ -9,7 +9,8 @@
 import UIKit
 
 final class StoryViewController: UIViewController {
-    private let pages: [StoryPage]
+
+    private let viewModel: StoryViewModel
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -23,6 +24,8 @@ final class StoryViewController: UIViewController {
         collectionView.isPagingEnabled = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.backgroundColor = .black
+        collectionView.prefetchDataSource = self
+
         return collectionView
     }()
 
@@ -37,7 +40,7 @@ final class StoryViewController: UIViewController {
     var onClose: (() -> Void)?
 
     init(pages: [StoryPage]) {
-        self.pages = pages
+        self.viewModel = StoryViewModel(pages: pages)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -95,17 +98,26 @@ final class StoryViewController: UIViewController {
 
 extension StoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        pages.count
+        viewModel.numberOfPages()
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else {
             return UICollectionViewCell()
         }
-        cell.configure(with: pages[indexPath.item])
+        let page = viewModel.page(at: indexPath.item)
+        let preloadedItem = viewModel.playerItem(for: indexPath.item)
+        cell.configure(with: page, preloadedItem: preloadedItem)
         return cell
     }
 }
+
+extension StoryViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        viewModel.prefetchItems(at: indexPaths)
+    }
+}
+
 
 private extension StoryViewController {
     enum Layout {
@@ -113,3 +125,4 @@ private extension StoryViewController {
         static let closeButtonPadding: CGFloat = 16
     }
 }
+
