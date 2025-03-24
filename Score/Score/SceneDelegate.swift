@@ -20,8 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
 
-        // Здесь ты создаешь SwiftUI вьюшку или обычный UIViewController
-        let rootView = LeagueListView()
+        let rootView = LeagueListView(viewModel: LeagueListViewModel(
+            fetchLeaguesUseCase: DefaultFetchLeaguesUseCase(
+                service: APIServiceImpl()
+            )
+        ))
         let hostingController = UIHostingController(rootView: rootView)
 
         window.rootViewController = hostingController

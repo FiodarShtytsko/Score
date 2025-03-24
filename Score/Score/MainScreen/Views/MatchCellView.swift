@@ -59,7 +59,7 @@ struct MatchCellView: View {
         VStack(spacing: 12) {
             KFImage(team.logoURL)
                 .resizable()
-                .frame(width: 30, height: 30)
+                .frame(width: Layout.logoSize, height: Layout.logoSize)
             Text(team.name)
                 .font(.subheadline)
                 .bold()
@@ -68,4 +68,10 @@ struct MatchCellView: View {
     }
 }
 
+private extension MatchCellView {
+    enum Layout {
+        static let logoSize: CGFloat = 30
+        static let animationDuration: Double = 0.35
+    }
+}
 
